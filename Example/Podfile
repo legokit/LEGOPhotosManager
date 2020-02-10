@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '8.0'
+
+target 'LEGOPhotosManager_Example' do
+  pod 'LEGOPhotosManager', :path => '../'
+  pod 'Masonry'
+  target 'LEGOPhotosManager_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
