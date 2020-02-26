@@ -1,5 +1,9 @@
 PODS:
   - LEGOPhotosManager (0.1.0):
+    - LEGOPhotosManager/LEGOPhotosCore (= 0.1.0)
+    - LEGOPhotosManager/LEGOPhotosUI (= 0.1.0)
+  - LEGOPhotosManager/LEGOPhotosCore (0.1.0)
+  - LEGOPhotosManager/LEGOPhotosUI (0.1.0):
     - Masonry
   - Masonry (1.1.0)
 
@@ -16,9 +20,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LEGOPhotosManager: 2ec3cadaa8e095a79cd9bc78d37c27241712a622
+  LEGOPhotosManager: dd77ad3671ec8b87c1c03652079ba710f2d35e71
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
-PODFILE CHECKSUM: 8f51693f30a30e865ad57f98e716302f8d1b30d2
+PODFILE CHECKSUM: f031fd18971f207e788c4a753811f8aa647c2cde
 
 COCOAPODS: 1.7.4

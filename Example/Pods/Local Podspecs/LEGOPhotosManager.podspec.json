@@ -1,9 +1,9 @@
 {
   "name": "LEGOPhotosManager",
   "version": "0.1.0",
-  "summary": "A short description of LEGOPhotosManager.",
+  "summary": "Photo management tool, you can get album list, photo list, save photos, delete photos, get photos by iCloud, cancel photo request  照片管理工具，可以获取相册列表、照片列表，保存照片、删除照片，通过 iCloud 获取照片，取消照片请求",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/yangqingren/LEGOPhotosManager",
+  "homepage": "https://github.com/legokit/LEGOPhotosManager",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,16 +12,33 @@
     "564008993@qq.com": "yangqingren@yy.com"
   },
   "source": {
-    "git": "https://github.com/yangqingren/LEGOPhotosManager.git",
+    "git": "https://github.com/legokit/LEGOPhotosManager.git",
     "tag": "0.1.0"
   },
   "platforms": {
     "ios": "9.0"
   },
-  "source_files": "LEGOPhotosManager/Classes/**/*",
-  "dependencies": {
-    "Masonry": [
+  "subspecs": [
+    {
+      "name": "LEGOPhotosUI",
+      "frameworks": [
+        "UIKit",
+        "Foundation"
+      ],
+      "source_files": "LEGOPhotosManager/Classes/ui/**/*",
+      "dependencies": {
+        "Masonry": [
 
-    ]
-  }
+        ]
+      }
+    },
+    {
+      "name": "LEGOPhotosCore",
+      "frameworks": [
+        "UIKit",
+        "Foundation"
+      ],
+      "source_files": "LEGOPhotosManager/Classes/core/**/*"
+    }
+  ]
 }
