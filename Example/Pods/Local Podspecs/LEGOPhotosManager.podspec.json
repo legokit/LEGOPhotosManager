@@ -18,27 +18,10 @@
   "platforms": {
     "ios": "9.0"
   },
-  "subspecs": [
-    {
-      "name": "LEGOPhotosUI",
-      "frameworks": [
-        "UIKit",
-        "Foundation"
-      ],
-      "source_files": "LEGOPhotosManager/Classes/ui/**/*",
-      "dependencies": {
-        "Masonry": [
+  "source_files": "LEGOPhotosManager/Classes/**/*",
+  "dependencies": {
+    "Masonry": [
 
-        ]
-      }
-    },
-    {
-      "name": "LEGOPhotosCore",
-      "frameworks": [
-        "UIKit",
-        "Foundation"
-      ],
-      "source_files": "LEGOPhotosManager/Classes/core/**/*"
-    }
-  ]
+    ]
+  }
 }

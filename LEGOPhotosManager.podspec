@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LEGOPhotosManager'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'Photo management tool, you can get album list, photo list, save photos, delete photos, get photos by iCloud, cancel photo request  照片管理工具，可以获取相册列表、照片列表，保存照片、删除照片，通过 iCloud 获取照片，取消照片请求'
 
 # This description is used to generate tags and improve search results.
@@ -30,17 +30,15 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '9.0'
 
-#  s.source_files = 'LEGOPhotosManager/Classes/**/*'
+  s.source_files = 'LEGOPhotosManager/Classes/**/*'
   
-  s.subspec 'LEGOPhotosUI' do |ss|
-      ss.frameworks = 'UIKit', 'Foundation'
-      ss.source_files = 'LEGOPhotosManager/Classes/ui/**/*'
-      ss.dependency 'Masonry'
-  end
+  s.dependency 'Masonry'
+  
+  # s.resource_bundles = {
+  #   'LEGOPhotosManager' => ['LEGOPhotosManager/Assets/*.png']
+  # }
 
-  s.subspec 'LEGOPhotosCore' do |ss|
-      ss.frameworks = 'UIKit', 'Foundation'
-      ss.source_files = 'LEGOPhotosManager/Classes/core/**/*'
-  end
-  
+  # s.public_header_files = 'Pod/Classes/**/*.h'
+  # s.frameworks = 'UIKit', 'MapKit'
+  # s.dependency 'AFNetworking', '~> 2.3'
 end

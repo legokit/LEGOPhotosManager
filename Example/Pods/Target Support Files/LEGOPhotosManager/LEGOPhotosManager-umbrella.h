@@ -10,8 +10,8 @@
 #endif
 #endif
 
-#import "LEGOPhotosManager.h"
 #import "LEGOPhotosLoading.h"
+#import "LEGOPhotosManager.h"
 
 FOUNDATION_EXPORT double LEGOPhotosManagerVersionNumber;
 FOUNDATION_EXPORT const unsigned char LEGOPhotosManagerVersionString[];
