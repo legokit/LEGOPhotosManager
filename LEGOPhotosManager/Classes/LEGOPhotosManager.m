@@ -360,4 +360,12 @@ static LEGOPhotosManager *shareManager = nil;
     [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
 }
 
+- (LEGOPhotosLoading *)iCloudLoading
+{
+    if (!_iCloudLoading) {
+        _iCloudLoading = [[LEGOPhotosLoading alloc] init];
+    }
+    return _iCloudLoading;
+}
+
 @end
