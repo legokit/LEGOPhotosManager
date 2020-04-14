@@ -49,6 +49,7 @@
 }
 
 - (void)setSystemLoadingView {
+    self.userInteractionEnabled = NO;
     [self addSubview:self.activityIndicatorView];
     [self.activityIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(self.mas_centerX);
