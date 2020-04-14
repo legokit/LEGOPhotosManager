@@ -343,7 +343,7 @@ static LEGOPhotosManager *shareManager = nil;
             text = @"Cancelled";
         }
         else {
-            text = [NSString stringWithFormat:@"%.0f%%", (floor(progress * 100))];
+            text = [NSString stringWithFormat:@"iCloud %.0f%%", (floor(progress * 100))];
         }
         [LEGOPhotosManager shareManager].iCloudLoading.progress = text;
     });
