@@ -7,12 +7,10 @@
 //
 
 #import "LEGOPhotosManager.h"
-#import "LEGOPhotosLoading.h"
 #define kLEGOSystemCollectionKey @"kLEGOSystemCollectionKey"
 #define LEGODisplayName [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]
 
 @interface LEGOPhotosManager ()
-@property (nonatomic, strong) LEGOPhotosLoading *iCloudLoading;
 
 @end
 
@@ -238,27 +236,6 @@ static LEGOPhotosManager *shareManager = nil;
     return requestID;
 }
 
-
-/** Get originalImage by asset 通过 asset 获取原图*/
-+ (PHImageRequestID)getOriginalImageByAsset:(PHAsset *)asset completion:(void (^__nullable)(UIImage *originalImage, PHImageRequestID requestID))completion
-{
-    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-    options.networkAccessAllowed = YES;
-    options.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
-        [self.class showDownICloudLoading:progress error:error];
-    };
-    __block PHImageRequestID requestID = [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [LEGOPhotosManager dismissICouldLoading];
-            BOOL complete = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
-            if (complete && completion && result) {
-                completion(result, requestID);
-            }
-        });
-    }];
-    return requestID;
-}
-
 /** Get originalImage by asset, param Progress 通过 asset 获取原图，带进度条*/
 + (PHImageRequestID)getOriginalImageByAsset:(PHAsset *)asset progressHandler:(PHAssetImageProgressHandler)progressHandler completion:(void (^__nullable)(UIImage *originalImage, PHImageRequestID requestID))completion
 {
@@ -270,28 +247,6 @@ static LEGOPhotosManager *shareManager = nil;
             BOOL complete = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
             if (complete && completion && result) {
                 completion(result, requestID);
-            }
-        });
-    }];
-    return requestID;
-}
-
-
-/** Get imageData by asset 通过 asset 获取原图 imageData*/
-+ (PHImageRequestID)getOriginalImageByAsset:(PHAsset *)asset completionData:(void (^)(NSData *originalImageData, PHImageRequestID requestID))completionData
-{
-    PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-//    options.synchronous = YES;  // 去掉原子性，则 resultHandler 会回调多次
-    options.networkAccessAllowed = YES;
-    options.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
-        [self.class showDownICloudLoading:progress error:error];
-    };
-    __block PHImageRequestID requestID =  [[PHCachingImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [LEGOPhotosManager dismissICouldLoading];
-            BOOL complete = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
-            if (completionData && imageData && complete) {
-                completionData(imageData, requestID);
             }
         });
     }];
@@ -317,13 +272,13 @@ static LEGOPhotosManager *shareManager = nil;
 }
 
 /** Get image and imageData by asset, and imageData 通过 asset 获取原图和原图 imageData*/
-+ (void)getOriginalImageByAsset:(PHAsset *)asset PHImageRequestIDs:(void(^__nullable)(NSArray <NSNumber *> *PHImageRequestIDs))PHImageRequestIDs completionImage:(void (^ __nullable)(UIImage *originalImage, PHImageRequestID requestID))completionImage completionData:(void (^)(NSData *originalImageData, PHImageRequestID requestID))completionData {
-    PHImageRequestID imageRequestID = [self.class getOriginalImageByAsset:asset completion:^(UIImage * _Nonnull originalImage, PHImageRequestID requestID) {
++ (void)getOriginalImageByAsset:(PHAsset *)asset PHImageRequestIDs:(void(^__nullable)(NSArray <NSNumber *> *PHImageRequestIDs))PHImageRequestIDs imageProgressHandler:(PHAssetImageProgressHandler)imageProgressHandler completionImage:(void (^ __nullable)(UIImage *originalImage, PHImageRequestID requestID))completionImage imageDataProgressHandler:(PHAssetImageProgressHandler)imageDataProgressHandler completionData:(void (^)(NSData *originalImageData, PHImageRequestID requestID))completionData {
+    PHImageRequestID imageRequestID = [self.class getOriginalImageByAsset:asset progressHandler:imageProgressHandler completion:^(UIImage * _Nonnull originalImage, PHImageRequestID requestID) {
         if (completionImage) {
             completionImage(originalImage, requestID);
         }
     }];
-    PHImageRequestID imageDataRequestID = [self.class getOriginalImageByAsset:asset completionData:^(NSData * _Nonnull originalImageData, PHImageRequestID requestID) {
+    PHImageRequestID imageDataRequestID = [self.class getOriginalImageByAsset:asset progressHandler:imageDataProgressHandler completionData:^(NSData * _Nonnull originalImageData, PHImageRequestID requestID) {
         if (completionData) {
             completionData(originalImageData, requestID);
         }
@@ -333,39 +288,11 @@ static LEGOPhotosManager *shareManager = nil;
     }
 }
 
-+ (void)showDownICloudLoading:(double)progress error:(NSError *)error {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (![LEGOPhotosManager shareManager].iCloudLoading.superview) {
-            [[LEGOPhotosManager shareManager].iCloudLoading show];
-        }
-        NSString *text = nil;
-        if (error) {
-            text = @"Cancelled";
-        }
-        else {
-            text = [NSString stringWithFormat:@"iCloud %.0f%%", (floor(progress * 100))];
-        }
-        [LEGOPhotosManager shareManager].iCloudLoading.progress = text;
-    });
-}
-
-+ (void)dismissICouldLoading {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[LEGOPhotosManager shareManager].iCloudLoading dismiss];
-    });
-}
-
 /** cancel request by requestID 取消请求*/
 + (void)cancelPHImageRequestID:(PHImageRequestID)requestID {
     [[PHCachingImageManager defaultManager] cancelImageRequest:requestID];
 }
 
-- (LEGOPhotosLoading *)iCloudLoading
-{
-    if (!_iCloudLoading) {
-        _iCloudLoading = [[LEGOPhotosLoading alloc] init];
-    }
-    return _iCloudLoading;
-}
+
 
 @end

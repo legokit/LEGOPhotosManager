@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "LEGOPhotosLoading.h"
 #import "LEGOPhotosManager.h"
 
 FOUNDATION_EXPORT double LEGOPhotosManagerVersionNumber;
