@@ -8,7 +8,7 @@
 
 #import "LEGOPhotosManager.h"
 #define kLEGOSystemCollectionKey @"kLEGOSystemCollectionKey"
-#define LEGODisplayName [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]
+#define LEGODisplayName [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleExecutableKey]
 
 @interface LEGOPhotosManager ()
 
