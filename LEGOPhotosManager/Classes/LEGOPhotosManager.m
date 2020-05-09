@@ -191,7 +191,7 @@ static LEGOPhotosManager *shareManager = nil;
         PHAssetCreationRequest *request = [PHAssetCreationRequest creationRequestForAsset];
         [request addResourceWithType:PHAssetResourceTypePhoto data:imageData options:[PHAssetResourceCreationOptions new]];
         request.location = location;
-        request.creationDate = [NSDate date];
+        request.creationDate = date ? date : [NSDate date];
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
@@ -208,7 +208,7 @@ static LEGOPhotosManager *shareManager = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         PHAssetChangeRequest *request = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
         request.location = location;
-        request.creationDate = [NSDate date];
+        request.creationDate = date ? date : [NSDate date];
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
