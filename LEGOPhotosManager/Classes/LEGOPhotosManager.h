@@ -22,11 +22,17 @@ NS_ASSUME_NONNULL_BEGIN
 /** Get a list of photos exclusive to the current app 获取当前应用专属照片列表*/
 + (NSMutableArray <PHAsset *> *)getCameraAssets;
 
-/** Save imagedata to system album 将 imageData 保存到系统相册*/
+/** Save imagedata to system App album 将 imageData 保存到系统App相册*/
 + (void)savePhotoToAssetByImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
 
-/** Save image to system album 将 image 保存到系统相册*/
+/** Save image to system App album 将 image 保存到系统App相册*/
 + (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
+
+/** Save image to system  album 将 imageData 保存到系统最新使用相册*/
++ (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData location:(CLLocation *)location completion:(void (^)(void))completion;
+
+/** Save image to system  album 将 image 保存到系统最新使用相册*/
++ (void)saveImageDataToSystemAssetCollectionWithImage:(UIImage *)image location:(CLLocation *)location completion:(void (^)(void))completion;
 
 /** Delete from system album by assets 通过 assets 从系统相册删除*/
 + (void)delePhotoAssets:(NSArray <PHAsset * >*)assets completion:(void (^)(BOOL success))completion;

@@ -133,12 +133,12 @@ static LEGOPhotosManager *shareManager = nil;
 
 
 
-/** Save imagedata to system album 将 imageData 保存到系统相册*/
+/** Save imagedata to system App album 将 imageData 保存到系统App相册*/
 + (void)savePhotoToAssetByImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion {
     [self.class savePhotoToAssetByImage:nil imageData:imageData date:date location:location completion:completion];
 }
 
-/** Save image to system album 将 image 保存到系统相册*/
+/** Save image to system App album 将 image 保存到系统App相册*/
 + (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion {
     [self.class savePhotoToAssetByImage:image imageData:nil date:date location:location completion:completion];
 }
@@ -178,6 +178,41 @@ static LEGOPhotosManager *shareManager = nil;
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
                     completion(success, error);
+                }
+            });
+        }
+     ];
+}
+
+/** Save image to system  album 将 imageData 保存到系统最新使用相册*/
++ (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData location:(CLLocation *)location completion:(void (^)(void))completion
+{
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        PHAssetCreationRequest *request = [PHAssetCreationRequest creationRequestForAsset];
+        [request addResourceWithType:PHAssetResourceTypePhoto data:imageData options:[PHAssetResourceCreationOptions new]];
+        request.location = location;
+        request.creationDate = [NSDate date];
+        } completionHandler:^(BOOL success, NSError * _Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion();
+                }
+            });
+        }
+     ];
+}
+
+/** Save image to system  album 将 image 保存到系统最新使用相册*/
++ (void)saveImageDataToSystemAssetCollectionWithImage:(UIImage *)image location:(CLLocation *)location completion:(void (^)(void))completion
+{
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        PHAssetChangeRequest *request = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+        request.location = location;
+        request.creationDate = [NSDate date];
+        } completionHandler:^(BOOL success, NSError * _Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion();
                 }
             });
         }
