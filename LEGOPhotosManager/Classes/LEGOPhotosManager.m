@@ -185,7 +185,7 @@ static LEGOPhotosManager *shareManager = nil;
 }
 
 /** Save image to system  album 将 imageData 保存到系统最新使用相册*/
-+ (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData location:(CLLocation *)location completion:(void (^)(void))completion
++ (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void (^)(void))completion
 {
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         PHAssetCreationRequest *request = [PHAssetCreationRequest creationRequestForAsset];
@@ -203,7 +203,7 @@ static LEGOPhotosManager *shareManager = nil;
 }
 
 /** Save image to system  album 将 image 保存到系统最新使用相册*/
-+ (void)saveImageDataToSystemAssetCollectionWithImage:(UIImage *)image location:(CLLocation *)location completion:(void (^)(void))completion
++ (void)saveImageDataToSystemAssetCollectionWithImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void (^)(void))completion
 {
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         PHAssetChangeRequest *request = [PHAssetChangeRequest creationRequestForAssetFromImage:image];

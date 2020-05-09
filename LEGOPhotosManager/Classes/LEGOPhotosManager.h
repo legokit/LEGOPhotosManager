@@ -29,10 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
 
 /** Save image to system  album 将 imageData 保存到系统最新使用相册*/
-+ (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData location:(CLLocation *)location completion:(void (^)(void))completion;
++ (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void (^)(void))completion;
 
 /** Save image to system  album 将 image 保存到系统最新使用相册*/
-+ (void)saveImageDataToSystemAssetCollectionWithImage:(UIImage *)image location:(CLLocation *)location completion:(void (^)(void))completion;
++ (void)saveImageDataToSystemAssetCollectionWithImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void (^)(void))completion;
 
 /** Delete from system album by assets 通过 assets 从系统相册删除*/
 + (void)delePhotoAssets:(NSArray <PHAsset * >*)assets completion:(void (^)(BOOL success))completion;
