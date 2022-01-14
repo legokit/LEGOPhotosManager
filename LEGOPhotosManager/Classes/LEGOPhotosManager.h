@@ -19,8 +19,14 @@ NS_ASSUME_NONNULL_BEGIN
 /** Get a list of all photos 获取所有照片列表*/
 + (NSMutableArray <PHAsset *> *)systemAssetsByAssetCollection:(PHAssetCollection *)assetCollection;
 
+/** Get a list of all video 获取所有视频列表*/
++ (NSMutableArray <PHAsset *> *)systemAssetsVideoByAssetCollection:(PHAssetCollection *)assetCollection;
+
 /** Get a list of photos exclusive to the current app 获取当前应用专属照片列表*/
 + (NSMutableArray <PHAsset *> *)getCameraAssets;
+
+/** Get a list of photos exclusive to the current app 获取当前应用专属照片/视频列表*/
++ (NSMutableArray <PHAsset *> *)getPhotoAndVideoAssets;
 
 /** Save imagedata to system App album 将 imageData 保存到系统App相册*/
 + (void)savePhotoToAssetByImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
@@ -28,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** Save image to system App album 将 image 保存到系统App相册*/
 + (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
 
+/** Save video to system App album 将 video 保存到系统App相册*/
++ (void)saveVideoToAssetByFileUrl:(NSURL *)fileUrl date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
+    
 /** Save image to system  album 将 imageData 保存到系统最新使用相册*/
 + (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void (^)(BOOL success, NSError *error))completion;
 
@@ -44,8 +53,13 @@ NS_ASSUME_NONNULL_BEGIN
 /** Get thumbnails image by asset 通过 asset 获取缩略图*/
 + (PHImageRequestID)getThumbnailImageByAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(void (^)(UIImage *thumbnailImage, PHImageRequestID requestID, BOOL isInCloud))completion;
 
+
+
 /** Get originalImage by asset, param Progress 通过 asset 获取原图，带进度条*/
 + (PHImageRequestID)getOriginalImageByAsset:(PHAsset *)asset progressHandler:(PHAssetImageProgressHandler)progressHandler completion:(void (^__nullable)(UIImage *originalImage, PHImageRequestID requestID))completion;
+
+/** Get thumbnails image by asset 通过 asset 获取缩略图*/
++ (PHImageRequestID)getThumbnailVideoByAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(void (^)(UIImage *thumbnailImage, PHImageRequestID requestID, BOOL isInCloud))completion;
 
 /** Get imageData by asset, param Progress 通过 asset 获取原图 imageData，带进度条*/
 + (PHImageRequestID)getOriginalImageByAsset:(PHAsset *)asset progressHandler:(PHAssetImageProgressHandler)progressHandler completionData:(void (^)(NSData *originalImageData, PHImageRequestID requestID))completionData;

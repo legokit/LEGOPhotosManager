@@ -70,6 +70,23 @@ static LEGOPhotosManager *shareManager = nil;
     return [NSMutableArray arrayWithArray:results];
 }
 
+/** Get a list of all video 获取所有视频列表*/
++ (NSMutableArray <PHAsset *> *)systemAssetsVideoByAssetCollection:(PHAssetCollection *)assetCollection
+{
+    PHFetchResult <PHAsset *> *assets = [PHAsset fetchAssetsInAssetCollection:assetCollection options:[PHFetchOptions new]];
+    __block NSMutableArray <PHAsset *> *array = [[NSMutableArray <PHAsset *> alloc] init];
+    [assets enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.mediaType == PHAssetMediaTypeVideo) {
+            [array addObject:obj];
+        }
+    }];
+//    NSArray *results = [array sortedArrayUsingComparator:^NSComparisonResult(PHAsset *obj1, PHAsset *obj2) {
+//        return [obj2.creationDate compare:obj1.creationDate];
+//    }];
+    NSArray *results = [NSArray arrayWithArray:[[array reverseObjectEnumerator] allObjects]];
+    return [NSMutableArray arrayWithArray:results];
+}
+
 /** Get a list of photos exclusive to the current app 获取当前应用专属照片列表*/
 + (NSMutableArray <PHAsset *> *)getCameraAssets {
     NSString *identity = [self.class getIDSystemCollectionUserDefaults];
@@ -81,12 +98,46 @@ static LEGOPhotosManager *shareManager = nil;
         assetCollection = [self.class getAssetCollectionByTitle:LEGODisplayName];
     }
     if (!assetCollection) {
+        assetCollection = [self.class getAssetCollectionByTitle:@"TOKYO"];
+    }
+    if (!assetCollection) {
         return [[NSMutableArray <PHAsset *> alloc] init];
     }
     PHFetchResult <PHAsset *> *assets = [PHAsset fetchAssetsInAssetCollection:assetCollection options:[PHFetchOptions new]];
     __block NSMutableArray <PHAsset *> *array = [[NSMutableArray <PHAsset *> alloc] init];
     [assets enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (obj.mediaType == PHAssetMediaTypeImage) {
+            [array addObject:obj];
+        }
+    }];
+//    NSArray *results = [array sortedArrayUsingComparator:^NSComparisonResult(PHAsset *obj1, PHAsset *obj2) {
+//        return [obj2.creationDate compare:obj1.creationDate];
+//    }];
+
+    NSArray *results = [NSArray arrayWithArray:[[array reverseObjectEnumerator] allObjects]];
+    return [NSMutableArray arrayWithArray:results];
+}
+
+/** Get a list of photos exclusive to the current app 获取当前应用专属照片/视频列表*/
++ (NSMutableArray <PHAsset *> *)getPhotoAndVideoAssets {
+    NSString *identity = [self.class getIDSystemCollectionUserDefaults];
+    PHAssetCollection *assetCollection = nil;
+    if (identity && identity.length) {
+        assetCollection = [self.class getAssetCollectionByIdentity:identity];
+    }
+    if (!assetCollection) {
+        assetCollection = [self.class getAssetCollectionByTitle:LEGODisplayName];
+    }
+    if (!assetCollection) {
+        assetCollection = [self.class getAssetCollectionByTitle:@"TOKYO"];
+    }
+    if (!assetCollection) {
+        return [[NSMutableArray <PHAsset *> alloc] init];
+    }
+    PHFetchResult <PHAsset *> *assets = [PHAsset fetchAssetsInAssetCollection:assetCollection options:[PHFetchOptions new]];
+    __block NSMutableArray <PHAsset *> *array = [[NSMutableArray <PHAsset *> alloc] init];
+    [assets enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (PHAssetMediaTypeImage == obj.mediaType || PHAssetMediaTypeVideo == obj.mediaType) {
             [array addObject:obj];
         }
     }];
@@ -184,6 +235,41 @@ static LEGOPhotosManager *shareManager = nil;
      ];
 }
 
+/** Save video to system App album 将 video 保存到系统App相册*/
++ (void)saveVideoToAssetByFileUrl:(NSURL *)fileUrl date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion
+{
+    NSString *identity = [self.class getIDSystemCollectionUserDefaults];
+    PHAssetCollection *assetCollection = nil;
+    if (identity && identity.length) {
+        assetCollection = [self.class getAssetCollectionByIdentity:identity];
+    }
+    if (!assetCollection) {
+        assetCollection = [self.class getAssetCollectionByTitle:LEGODisplayName];
+    }
+    if (!assetCollection) {
+        assetCollection = [self.class createAssetCollection];
+    }
+    NSLog(@"Photos.Kit开始保存相片于相册=%@",assetCollection);
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+            PHAssetCreationRequest *request = [PHAssetCreationRequest creationRequestForAsset];
+            [request addResourceWithType:PHAssetResourceTypeVideo fileURL:fileUrl options:[PHAssetResourceCreationOptions new]];
+
+            request.location = location;
+            request.creationDate = date ? date : [NSDate date];
+            PHObjectPlaceholder *placeholder = request.placeholderForCreatedAsset;
+            PHAssetCollectionChangeRequest *changeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:assetCollection];
+            [changeRequest addAssets:@[placeholder]];
+        } completionHandler:^(BOOL success, NSError * _Nullable error) {
+            NSLog(@"Photos.Kit保存相片完毕error=%@",error.localizedDescription);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completion) {
+                    completion(success, error);
+                }
+            });
+        }
+    ];
+}
+
 /** Save image to system  album 将 imageData 保存到系统最新使用相册*/
 + (void)saveImageDataToSystemAssetCollectionWithImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void (^)(BOOL success, NSError *error))completion
 {
@@ -265,6 +351,37 @@ static LEGOPhotosManager *shareManager = nil;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completion) {
                 completion(image, requestID,[[info objectForKey:PHImageResultIsInCloudKey] boolValue]);
+            }
+        });
+    }];
+    return requestID;
+}
+
+/** Get thumbnails image by asset 通过 asset 获取缩略图*/
++ (PHImageRequestID)getThumbnailVideoByAsset:(PHAsset *)asset targetSize:(CGSize)targetSize completion:(void (^)(UIImage *thumbnailImage, PHImageRequestID requestID, BOOL isInCloud))completion
+{
+    PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+    options.version = PHVideoRequestOptionsVersionCurrent;
+    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+    PHImageManager *manager = [PHImageManager defaultManager];
+    __block PHImageRequestID requestID = [manager requestAVAssetForVideo:asset
+                           options:options
+                     resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+
+        AVURLAsset *urlAsset = (AVURLAsset *)asset;
+        AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:urlAsset];
+        gen.appliesPreferredTrackTransform = YES;
+        gen.maximumSize = targetSize;
+        CMTime time = CMTimeMakeWithSeconds(3.0, 600);
+        NSError *error = nil;
+        CMTime actualTime;
+        CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+        UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+        CGImageRelease(image);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            BOOL complete = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+            if (complete && completion && thumb) {
+                completion(thumb, requestID, [[info objectForKey:PHImageResultIsInCloudKey] boolValue]);
             }
         });
     }];
