@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** Get a list of all video 获取所有视频列表*/
 + (NSMutableArray <PHAsset *> *)systemAssetsVideoByAssetCollection:(PHAssetCollection *)assetCollection;
 
+/** Get a list of all video 获取所有视频、照片列表*/
++ (NSMutableArray <PHAsset *> *)systemAssetsVideoAndPhotoByAssetCollection:(PHAssetCollection *)assetCollection;
+
 /** Get a list of photos exclusive to the current app 获取当前应用专属照片列表*/
 + (NSMutableArray <PHAsset *> *)getCameraAssets;
 

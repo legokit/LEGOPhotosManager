@@ -70,6 +70,7 @@ static LEGOPhotosManager *shareManager = nil;
     return [NSMutableArray arrayWithArray:results];
 }
 
+
 /** Get a list of all video 获取所有视频列表*/
 + (NSMutableArray <PHAsset *> *)systemAssetsVideoByAssetCollection:(PHAssetCollection *)assetCollection
 {
@@ -77,6 +78,23 @@ static LEGOPhotosManager *shareManager = nil;
     __block NSMutableArray <PHAsset *> *array = [[NSMutableArray <PHAsset *> alloc] init];
     [assets enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (obj.mediaType == PHAssetMediaTypeVideo) {
+            [array addObject:obj];
+        }
+    }];
+//    NSArray *results = [array sortedArrayUsingComparator:^NSComparisonResult(PHAsset *obj1, PHAsset *obj2) {
+//        return [obj2.creationDate compare:obj1.creationDate];
+//    }];
+    NSArray *results = [NSArray arrayWithArray:[[array reverseObjectEnumerator] allObjects]];
+    return [NSMutableArray arrayWithArray:results];
+}
+
+/** Get a list of all video 获取所有视频、照片列表*/
++ (NSMutableArray <PHAsset *> *)systemAssetsVideoAndPhotoByAssetCollection:(PHAssetCollection *)assetCollection
+{
+    PHFetchResult <PHAsset *> *assets = [PHAsset fetchAssetsInAssetCollection:assetCollection options:[PHFetchOptions new]];
+    __block NSMutableArray <PHAsset *> *array = [[NSMutableArray <PHAsset *> alloc] init];
+    [assets enumerateObjectsUsingBlock:^(PHAsset * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj.mediaType == PHAssetMediaTypeVideo || obj.mediaType == PHAssetMediaTypeImage) {
             [array addObject:obj];
         }
     }];
@@ -372,7 +390,7 @@ static LEGOPhotosManager *shareManager = nil;
         AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:urlAsset];
         gen.appliesPreferredTrackTransform = YES;
         gen.maximumSize = targetSize;
-        CMTime time = CMTimeMakeWithSeconds(3.0, 600);
+        CMTime time = CMTimeMakeWithSeconds(0.5, 600);
         NSError *error = nil;
         CMTime actualTime;
         CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
