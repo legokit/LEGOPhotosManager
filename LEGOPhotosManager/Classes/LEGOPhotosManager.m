@@ -367,7 +367,8 @@ static LEGOPhotosManager *shareManager = nil;
     options.networkAccessAllowed = YES;
     __block PHImageRequestID requestID = [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:targetSize contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage * _Nullable image, NSDictionary * _Nullable info) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completion) {
+            BOOL complete = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
+            if (completion && complete) {
                 completion(image, requestID,[[info objectForKey:PHImageResultIsInCloudKey] boolValue]);
             }
         });

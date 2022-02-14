@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LEGOPhotosManager'
-  s.version          = '0.2.4'
+  s.version          = '0.2.5'
   s.summary          = 'Photo management tool, you can get album list, photo list, save photos, delete photos, get photos by iCloud, cancel photo request  照片管理工具，可以获取相册列表、照片列表，保存照片、删除照片，通过 iCloud 获取照片，取消照片请求'
 
 # This description is used to generate tags and improve search results.
