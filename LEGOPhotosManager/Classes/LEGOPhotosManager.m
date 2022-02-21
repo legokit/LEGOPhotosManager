@@ -381,7 +381,7 @@ static LEGOPhotosManager *shareManager = nil;
 {
     PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
     options.version = PHVideoRequestOptionsVersionCurrent;
-    options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+    options.deliveryMode = PHVideoRequestOptionsDeliveryModeFastFormat;
     PHImageManager *manager = [PHImageManager defaultManager];
     __block PHImageRequestID requestID = [manager requestAVAssetForVideo:asset
                            options:options
