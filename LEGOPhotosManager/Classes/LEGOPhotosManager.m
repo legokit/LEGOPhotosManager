@@ -226,6 +226,7 @@ static LEGOPhotosManager *shareManager = nil;
         assetCollection = [self.class createAssetCollection];
     }
     NSLog(@"Photos.Kit开始保存相片于相册=%@",assetCollection);
+    
     __block NSString *assetId = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
             PHAssetChangeRequest *request = nil;
