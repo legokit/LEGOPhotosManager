@@ -503,7 +503,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LEGOPhotosManager/LEGOPhotosManager-Prefix.pch";
 				INFOPLIST_FILE = "LEGOPhotosManager/LEGOPhotosManager-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = yangqingren001.legophotosmanager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -521,7 +521,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LEGOPhotosManager/LEGOPhotosManager-Prefix.pch";
 				INFOPLIST_FILE = "LEGOPhotosManager/LEGOPhotosManager-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = yangqingren001.legophotosmanager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
