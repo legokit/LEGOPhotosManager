@@ -1,5 +1,5 @@
 PODS:
-  - LEGOPhotosManager (0.1.0):
+  - LEGOPhotosManager (0.3.8):
     - Masonry
   - Masonry (1.1.0)
 
@@ -8,7 +8,7 @@ DEPENDENCIES:
   - Masonry
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Masonry
 
 EXTERNAL SOURCES:
@@ -16,9 +16,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LEGOPhotosManager: 41683b0ae30232019a63faf98659c6e6d5347a63
+  LEGOPhotosManager: eb91e49c9a98688a07d68beeedbf6e99c61bd4b5
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
 
-PODFILE CHECKSUM: f031fd18971f207e788c4a753811f8aa647c2cde
+PODFILE CHECKSUM: 25d1c521f14ff1f46ca721956afe917b4d138ef5
 
-COCOAPODS: 1.7.4
+COCOAPODS: 1.11.3
