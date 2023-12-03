@@ -32,10 +32,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSMutableArray <PHAsset *> *)getPhotoAndVideoAssets;
 
 /** Save imagedata to system App album 将 imageData 保存到系统App相册*/
-+ (void)savePhotoToAssetByImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
++ (void)savePhotoToAssetByImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSString *assetId, NSError *error))completion;
 
 /** Save image to system App album 将 image 保存到系统App相册*/
-+ (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;
++ (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSString *assetId, NSError *error))completion;
 
 /** Save video to system App album 将 video 保存到系统App相册*/
 + (void)saveVideoToAssetByFileUrl:(NSURL *)fileUrl date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion;

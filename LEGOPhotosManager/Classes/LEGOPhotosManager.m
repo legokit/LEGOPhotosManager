@@ -203,16 +203,16 @@ static LEGOPhotosManager *shareManager = nil;
 
 
 /** Save imagedata to system App album 将 imageData 保存到系统App相册*/
-+ (void)savePhotoToAssetByImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion {
++ (void)savePhotoToAssetByImageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSString *assetId, NSError *error))completion {
     [self.class savePhotoToAssetByImage:nil imageData:imageData date:date location:location completion:completion];
 }
 
 /** Save image to system App album 将 image 保存到系统App相册*/
-+ (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion {
++ (void)savePhotoToAssetByImage:(UIImage *)image date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSString *assetId, NSError *error))completion {
     [self.class savePhotoToAssetByImage:image imageData:nil date:date location:location completion:completion];
 }
 
-+ (void)savePhotoToAssetByImage:(UIImage *)image imageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSError *error))completion {
++ (void)savePhotoToAssetByImage:(UIImage *)image imageData:(NSData *)imageData date:(NSDate *)date location:(CLLocation *)location completion:(void(^)(BOOL success, NSString *assetId, NSError *error))completion {
 
     NSString *identity = [self.class getIDSystemCollectionUserDefaults];
     PHAssetCollection *assetCollection = nil;
@@ -226,6 +226,7 @@ static LEGOPhotosManager *shareManager = nil;
         assetCollection = [self.class createAssetCollection];
     }
     NSLog(@"Photos.Kit开始保存相片于相册=%@",assetCollection);
+    __block NSString *assetId = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
             PHAssetChangeRequest *request = nil;
             if (imageData) {
@@ -242,11 +243,12 @@ static LEGOPhotosManager *shareManager = nil;
             PHObjectPlaceholder *placeholder = request.placeholderForCreatedAsset;
             PHAssetCollectionChangeRequest *changeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:assetCollection];
             [changeRequest addAssets:@[placeholder]];
+            assetId = placeholder.localIdentifier;
         } completionHandler:^(BOOL success, NSError * _Nullable error) {
             NSLog(@"Photos.Kit保存相片完毕error=%@",error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completion) {
-                    completion(success, error);
+                    completion(success, assetId, error);
                 }
             });
         }
