@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LEGOPhotosManager'
-  s.version          = '0.3.10'
+  s.version          = '0.3.11'
   s.summary          = 'Photo management tool, you can get album list, photo list, save photos, delete photos, get photos by iCloud, cancel photo request  照片管理工具，可以获取相册列表、照片列表，保存照片、删除照片，通过 iCloud 获取照片，取消照片请求'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/legokit/LEGOPhotosManager.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'LEGOPhotosManager/Classes/**/*'
     
